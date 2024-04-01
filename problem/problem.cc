@@ -35,7 +35,6 @@ Problem::Problem(std::string filename) {
   getline(inputFile, currentLine);
   int i = 0;
   while(getline(inputFile, currentLine) && i < assignments_) {
-    std::cout << "number of lines: " << i << std::endl;
     std::string delimiter = "\t";
     size_t pos = 0;
     std::string token;
@@ -47,16 +46,7 @@ Problem::Problem(std::string filename) {
       j++;
     }
     // setupCosts_[i][j] = std::stoi(currentLine);
-    std::cout << currentLine << std::endl;
     i++;
-  }
-
-  std::cout << "setup costs: " << std::endl;
-  for (int i = 0; i < assignments_; i++) {
-    for (int j = 0; j < assignments_; j++) {
-      std::cout << setupCosts_[i][j] << " ";
-    }
-    std::cout << std::endl;
   }
 
   assigned_.resize(assignments_ + 1, false);
@@ -67,5 +57,19 @@ bool Problem::IsAssigned(int assignment) {
   return assigned_[assignment];
 }
 
+bool Problem::HasUnassigned() const {
+  for (int i = 1; i < assignments_; i++) {
+    if (!assigned_[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+void Problem::RestoreAssigned() {
+  for (int i = 1; i < assignments_; i++) {
+    assigned_[i] = false;
+  }
+}
 
   

@@ -13,6 +13,7 @@ class GreedyAlgorithm {
   Solution Solve();
  private:
   Problem problem_;
+  int TCT = 0;
 };
 
 #endif // GREEDY_ALGORITHM_H
