@@ -13,6 +13,7 @@ class GRASPAlgorithm {
   Solution Solve();
   int CalculatesHeuristic(const Solution& solution, int assignment);
   int GetTCT() const { return TCT; }
+  Solution executesNTimes(int iterations);
  private:
   Problem problem_;
   int TCT = 0;

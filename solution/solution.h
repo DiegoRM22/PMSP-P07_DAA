@@ -15,8 +15,10 @@ class Solution {
   void AddAssignment(int machine, int assignment) {
     assignmentsSequences_[machine].push_back(assignment);
   }
+  int calculatesTCT(const std::vector<std::vector<int>>& totalCosts, const std::vector<int>& assigmentCosts) const;
+  void SwapAssignments(int machine, int firstAssignment, int secondAssignment);
  private:
-  std::vector<std::vector<int>> assignmentsSequences_;  
+  std::vector<std::vector<int>> assignmentsSequences_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Solution& solution);

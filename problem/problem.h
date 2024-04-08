@@ -19,6 +19,8 @@ class Problem {
   bool HasUnassigned() const;
   void RestoreAssigned();
   std::vector<bool> assigned_;
+  void CalculateTotalCosts();
+  std::vector<std::vector<int>> GetTotalCosts() const { return totalCosts_; }
 
 
  private:
@@ -26,6 +28,7 @@ class Problem {
   int machines_;
   std::vector<int> assignmentsCosts_;
   std::vector<std::vector<int>> setupCosts_;
+  std::vector<std::vector<int>> totalCosts_;
 };
 
 #endif  // PROBLEM_H

@@ -5,6 +5,10 @@
 
 #include "problem.h"
 
+/**
+ * @brief Constructor de la clase Problem.
+ * @param filename Nombre del fichero con la instancia del problema.
+*/
 Problem::Problem(std::string filename) {
   std::ifstream inputFile(filename);
   if (!inputFile) {
@@ -31,7 +35,7 @@ Problem::Problem(std::string filename) {
     currentLine = currentLine.substr(currentLine.find(delimiter) + 1);
   }
   assignmentsCosts_.push_back(std::stoi(currentLine));
-  setupCosts_.resize(assignments_ + 1, std::vector<int>(assignments_ + 1));
+  setupCosts_.resize(assignments_, std::vector<int>(assignments_));
   getline(inputFile, currentLine);
   int i = 0;
   while(getline(inputFile, currentLine) && i < assignments_) {
@@ -53,10 +57,18 @@ Problem::Problem(std::string filename) {
   inputFile.close();
 }
 
+/**
+ * @brief Devuelve el número de tareas.
+ * @return Número de tareas.
+*/
 bool Problem::IsAssigned(int assignment) {
   return assigned_[assignment];
 }
 
+/**
+ * @brief Devuelve el número de tareas.
+ * @return Número de tareas.
+*/
 bool Problem::HasUnassigned() const {
   for (int i = 1; i < assignments_; i++) {
     if (!assigned_[i]) {
@@ -66,9 +78,25 @@ bool Problem::HasUnassigned() const {
   return false;
 }
 
+/**
+ * @brief Devuelve el número de tareas.
+ * @return Número de tareas.
+*/
 void Problem::RestoreAssigned() {
   for (int i = 1; i < assignments_; i++) {
     assigned_[i] = false;
+  }
+}
+
+/**
+ * @brief Calcula los costes totales de las tareas.
+*/
+void Problem::CalculateTotalCosts() {
+  totalCosts_.resize(assignments_, std::vector<int>(assignments_));
+  for (int i = 0; i < assignments_; i++) {
+    for (int j = 0; j < assignments_; j++) {
+      totalCosts_[i][j] = setupCosts_[i][j] + assignmentsCosts_[j];
+    }
   }
 }
 

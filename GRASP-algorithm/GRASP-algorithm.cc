@@ -4,6 +4,11 @@
 
 #include "GRASP-algorithm.h"
 
+/**
+ * @brief Constructor de la clase GRASPAlgorithm.
+ * @param problem Instancia del problema a resolver.
+ * @param alpha Parametro de la heuristica.
+*/
 bool allVisited(std::vector<bool> visited) {
   for (int i = 0; i < visited.size(); i++) {
     if (!visited[i]) {
@@ -13,6 +18,11 @@ bool allVisited(std::vector<bool> visited) {
   return true;
 }
 
+/**
+ * @brief Constructor de la clase GRASPAlgorithm.
+ * @param problem Instancia del problema a resolver.
+ * @param alpha Parametro de la heuristica.
+*/
 int getNumberOfVisited(std::vector<bool> visited) {
   int count = 0;
   for (int i = 0; i < visited.size(); i++) {
@@ -23,22 +33,33 @@ int getNumberOfVisited(std::vector<bool> visited) {
   return count;
 }
 
+/**
+ * @brief Constructor de la clase GRASPAlgorithm.
+ * @param problem Instancia del problema a resolver.
+ * @param alpha Parametro de la heuristica.
+*/
 Solution GRASPAlgorithm::Solve() {
   Solution solution(problem_.GetMachines());
   problem_.SetAssigned(0);
   problem_.assigned_.erase(problem_.assigned_.end());
+  problem_.CalculateTotalCosts();
+  std::vector<std::vector<int>> totalCosts = problem_.GetTotalCosts();
   // Seleccionar la m tareas m con menores valores de t0j para ser introducidas en las
   // primeras posiciones de los arrays que forman la solucion S.
   for (int i = 0; i < problem_.GetMachines(); i++) {
     int min = INT_MAX;
     int minIndex = -1;
     for (int j = 1; j < problem_.GetAssignments(); j++) {
-      int t0j = problem_.GetSetupCosts()[0][j] + problem_.GetAssignmentsCosts()[j];
-      if (t0j < min && !problem_.IsAssigned(j)) {
-        min = t0j;
+      Solution auxSolution(solution);
+      auxSolution.AddAssignment(i, j);
+      int increment = auxSolution.calculatesTCT(totalCosts, problem_.GetAssignmentsCosts()) - 
+      solution.calculatesTCT(totalCosts, problem_.GetAssignmentsCosts());
+      if (increment < min && !problem_.IsAssigned(j)) {
+        min = increment;
         minIndex = j;
       }
     }
+    std::cout << "menor incremento del coste: " << min << " minIndex: " << minIndex << std::endl;
     solution.AddAssignment(i, minIndex);
     problem_.SetAssigned(minIndex);
     TCT += min;
@@ -52,7 +73,6 @@ Solution GRASPAlgorithm::Solve() {
         heuristics.push_back(CalculatesHeuristic(solution, i));
       }
     }
-
     // Creates a new vector with unassigned tasks.
     std::vector<int> unassignedAssignments;
     for (int i = 1; i < problem_.GetAssignments(); i++) {
@@ -77,30 +97,30 @@ Solution GRASPAlgorithm::Solve() {
       bestAssignments.push_back(unassignedAssignments[minIndex]);
       heuristics[minIndex] = -1;
     }
- 
     // For each machine, adds a random task from the best tasks.
     for (int i = 0; i < problem_.GetMachines(); i++) {
       if (bestAssignments.size() != 0) {
         int randomIndex = rand() % bestAssignments.size();
+        Solution auxSolution(solution);
         if (bestAssignments[randomIndex] != 0) {
           solution.AddAssignment(i, bestAssignments[randomIndex]);
+          TCT += solution.calculatesTCT(totalCosts, problem_.GetAssignmentsCosts()) -
+          auxSolution.calculatesTCT(totalCosts, problem_.GetAssignmentsCosts());
         } else {
           bestAssignments.erase(bestAssignments.begin() + randomIndex);
         }
         problem_.SetAssigned(bestAssignments[randomIndex]);
-        TCT += problem_.GetSetupCosts()[solution.GetAssignmentsSequences()[i].back()][bestAssignments[randomIndex]] + 
-              problem_.GetAssignmentsCosts()[bestAssignments[randomIndex]];
         bestAssignments.erase(bestAssignments.begin() + randomIndex);
       }
     }
-    
     if (problem_.GetAssignments() - getNumberOfVisited(problem_.assigned_) < problem_.GetMachines()) {
       for (int i = 1; i < problem_.GetAssignments(); i++) {
         if (!problem_.IsAssigned(i)) {
+          Solution auxSolution(solution);
           solution.AddAssignment(0, i);
           problem_.SetAssigned(i);
-          TCT += problem_.GetSetupCosts()[solution.GetAssignmentsSequences()[0].back()][i] + 
-                problem_.GetAssignmentsCosts()[i];
+          TCT += solution.calculatesTCT(totalCosts, problem_.GetAssignmentsCosts()) -
+          auxSolution.calculatesTCT(totalCosts, problem_.GetAssignmentsCosts());
         }
       }
     }
@@ -108,8 +128,31 @@ Solution GRASPAlgorithm::Solve() {
   return solution;
 }
 
+/**
+ * @brief Ejecuta el algoritmo N veces.
+ * @return Mejor solucion encontrada.
+*/
+Solution GRASPAlgorithm::executesNTimes(int iterations) {
+  Solution bestSolution(problem_.GetMachines());
+  int bestTCT = INT_MAX;
+  for (int i = 0; i < iterations; i++) {
+    Solution solution = Solve();
+    if (TCT < bestTCT) {
+      bestTCT = TCT;
+      bestSolution = solution;
+    }
+    TCT = 0;
+    problem_.RestoreAssigned();
+  }
+  return bestSolution;
+}
 
-
+/**
+ * @brief Calcula la heuristica de una tarea.
+ * @param solution Solucion actual.
+ * @param assignment Tarea a la que se le va a calcular la heuristica.
+ * @return Heuristica de la tarea.
+*/
 int GRASPAlgorithm::CalculatesHeuristic(const Solution& solution, int assignment) {
   int heuristic = 0;
   std::vector<bool> assignedAuxiliar = problem_.GetAssigned();
