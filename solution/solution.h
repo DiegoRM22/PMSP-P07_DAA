@@ -17,6 +17,9 @@ class Solution {
   }
   int calculatesTCT(const std::vector<std::vector<int>>& totalCosts, const std::vector<int>& assigmentCosts) const;
   void SwapAssignments(int machine, int firstAssignment, int secondAssignment);
+  void InterchangeAssignments(int firstMachine, int firstAssignment, int secondMachine, int secondAssignment);
+  void ReinsertAssignment(int machine, int assignment, int position);
+  void ReinsertAssignment(int firstMachine, int firstAssignment, int secondMachine, int position);
  private:
   std::vector<std::vector<int>> assignmentsSequences_;
 };

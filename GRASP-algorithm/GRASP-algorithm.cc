@@ -59,7 +59,6 @@ Solution GRASPAlgorithm::Solve() {
         minIndex = j;
       }
     }
-    std::cout << "menor incremento del coste: " << min << " minIndex: " << minIndex << std::endl;
     solution.AddAssignment(i, minIndex);
     problem_.SetAssigned(minIndex);
     TCT += min;

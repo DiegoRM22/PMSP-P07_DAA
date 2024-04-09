@@ -55,3 +55,39 @@ int Solution::calculatesTCT(const std::vector<std::vector<int>>& totalCosts, con
 void Solution::SwapAssignments(int machine, int firstAssignment, int secondAssignment) {
   std::swap(assignmentsSequences_[machine][firstAssignment], assignmentsSequences_[machine][secondAssignment]);
 }
+
+/**
+ * @brief Interchanges two assignments between two machines.
+ * @param firstMachine Machine where the first assignment is.
+ * @param firstAssignment First assignment to interchange.
+ * @param secondMachine Machine where the second assignment is.
+ * @param secondAssignment Second assignment to interchange.
+*/
+void Solution::InterchangeAssignments(int firstMachine, int firstAssignment, int secondMachine, int secondAssignment) {
+  std::swap(assignmentsSequences_[firstMachine][firstAssignment], assignmentsSequences_[secondMachine][secondAssignment]);
+}
+
+/**
+ * @brief Reinserts an assignment in another position in the same sequence.
+ * @param machine Machine where the assignment is.
+ * @param assignment Assignment to reinsert.
+ * @param position Position to reinsert the assignment.
+*/
+void Solution::ReinsertAssignment(int machine, int assignment, int position) {
+  int value = assignmentsSequences_[machine][assignment];
+  assignmentsSequences_[machine].erase(assignmentsSequences_[machine].begin() + assignment);
+  assignmentsSequences_[machine].insert(assignmentsSequences_[machine].begin() + position, value);
+}
+
+/**
+ * @brief Reinserts an assignment in another position of another machine.
+ * @param firstMachine Machine where the first assignment is.
+ * @param firstAssignment First assignment to reinsert.
+ * @param secondMachine Machine where the second assignment is.
+ * @param secondAssignment Second assignment to reinsert.
+*/
+void Solution::ReinsertAssignment(int firstMachine, int firstAssignment, int secondMachine, int position) {
+  int value = assignmentsSequences_[firstMachine][firstAssignment];
+  assignmentsSequences_[firstMachine].erase(assignmentsSequences_[firstMachine].begin() + firstAssignment);
+  assignmentsSequences_[secondMachine].insert(assignmentsSequences_[secondMachine].begin() + position, value);
+}
