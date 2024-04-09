@@ -30,28 +30,42 @@ int main(int argc, char *argv[]) {
 
   GRASPAlgorithm graspAlgorithm(problem);
   Solution solution2 = graspAlgorithm.Solve();
+  int graspTCT = solution2.calculatesTCT(totalCosts, problem.GetAssignmentsCosts());
   std::cout << "TCT GRASP: " << solution2.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
   std::cout << solution2 << std::endl;
 
   // Busquedas locales
+  // EVALUACION DE MOVIMIENTOS
   SwapLocalSearch swapLocalSearch(problem, solution2);
   Solution solution3 = swapLocalSearch.Solve();
-  std::cout << "TCT SWAP: " << solution3.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
+  int swapTCT = solution3.calculatesTCT(totalCosts, problem.GetAssignmentsCosts());
+  double improvement = (graspTCT - swapTCT) * 100 / graspTCT;
+  std::cout << "TCT SWAP: " << swapTCT << std::endl;
+  std::cout << "Porcentaje de mejora con respecto a GRASP: " << improvement << "%" << std::endl;
   std::cout << solution3 << std::endl;
 
   InterSwapLocalSearch interSwapLocalSearch(problem, solution2);
   Solution solution4 = interSwapLocalSearch.Solve();
+  int interSwapTCT = solution4.calculatesTCT(totalCosts, problem.GetAssignmentsCosts());
+  improvement = (graspTCT - interSwapTCT) * 100 / graspTCT;
   std::cout << "TCT SWAP INTER MAQUINA: " << solution4.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
+  std::cout << "Porcentaje de mejora con respecto a GRASP: " << improvement << "%" << std::endl;
   std::cout << solution4 << std::endl;
 
   ReinsertLocalSearch reinsertLocalSearch(problem, solution2);
   Solution solution5 = reinsertLocalSearch.Solve();
+  int reinsertTCT = solution5.calculatesTCT(totalCosts, problem.GetAssignmentsCosts());
+  improvement = (graspTCT - reinsertTCT) * 100 / graspTCT;
   std::cout << "TCT REINSERTAR BUSQUEDA LOCAL: " << solution5.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
+  std::cout << "Porcentaje de mejora con respecto a GRASP: " << improvement << "%" << std::endl;
   std::cout << solution5 << std::endl;
 
   InterReinsertLocalSearch interReinsertLocalSearch(problem, solution2);
   Solution solution6 = interReinsertLocalSearch.Solve();
+  int interReinsertTCT = solution6.calculatesTCT(totalCosts, problem.GetAssignmentsCosts());
+  improvement = (graspTCT - interReinsertTCT) * 100 / graspTCT;
   std::cout << "TCT REINSERTAR INTERMAQUINA BUSQUEDA LOCAL: " << solution6.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
+  std::cout << "Porcentaje de mejora con respecto a GRASP: " << improvement << "%" << std::endl;
   std::cout << solution6 << std::endl;
 
   return 0;

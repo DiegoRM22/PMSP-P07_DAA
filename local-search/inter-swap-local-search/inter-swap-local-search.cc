@@ -3,7 +3,11 @@
 
 #include "inter-swap-local-search.h"
 
-
+/**
+ * @brief Generates the neighbors of a solution.
+ * @param solution Solution to generate the neighbors.
+ * @return Neighbors of the solution.
+ */
 std::vector<Solution> InterSwapLocalSearch::GenerateNeighbors(const Solution& solution) {
   // swap two assignments between two different sequences
   std::vector<Solution> neighbors;

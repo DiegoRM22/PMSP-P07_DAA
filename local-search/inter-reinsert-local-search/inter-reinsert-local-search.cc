@@ -3,6 +3,11 @@
 
 #include "inter-reinsert-local-search.h"
 
+/**
+ * @brief Generates the neighbors of a solution.
+ * @param solution Solution to generate the neighbors.
+ * @return Neighbors of the solution.
+ */
 std::vector<Solution> InterReinsertLocalSearch::GenerateNeighbors(const Solution& solution) {
   // reinsert an assignment in another position of another machine
   std::vector<Solution> neighbors;

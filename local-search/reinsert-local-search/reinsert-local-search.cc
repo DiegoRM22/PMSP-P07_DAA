@@ -3,6 +3,11 @@
 
 #include "reinsert-local-search.h"
 
+/**
+ * @brief Generates the neighbors of a solution.
+ * @param solution Solution to generate the neighbors.
+ * @return Neighbors of the solution.
+ */
 std::vector<Solution> ReinsertLocalSearch::GenerateNeighbors(const Solution& solution) {
   // reinsert an assignment in another position in the same sequence
   std::vector<Solution> neighbors;

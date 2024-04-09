@@ -3,6 +3,10 @@
 
 #include "local-search.h"
 
+/**
+  * @brief Method to solve the problem.
+  * @return The best solution found.
+  */
 Solution LocalSearch::Solve() {
   Solution bestSolution = currentSolution_;
   // print neighbor solutions
