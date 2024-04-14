@@ -10,6 +10,8 @@
 #include "local-search/inter-swap-local-search/inter-swap-local-search.h"
 #include "local-search/reinsert-local-search/reinsert-local-search.h"
 #include "local-search/inter-reinsert-local-search/inter-reinsert-local-search.h"
+#include "VND/VND.h"
+#include "GVNS/GVNS.h"
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -67,6 +69,22 @@ int main(int argc, char *argv[]) {
   std::cout << "TCT REINSERTAR INTERMAQUINA BUSQUEDA LOCAL: " << solution6.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
   std::cout << "Porcentaje de mejora con respecto a GRASP: " << improvement << "%" << std::endl;
   std::cout << solution6 << std::endl;
+
+
+  std::cout << "VNS" << std::endl;
+  // VND vnd(problem);
+  // Solution solution7 = vnd.ExecuteVND();
+  GVNS gvns(problem);
+  // Solution solution7 = gvns.ExecuteGVNS();
+  // improvement = (graspTCT - solution7.calculatesTCT(totalCosts, problem.GetAssignmentsCosts())) * 100 / graspTCT;
+  // std::cout << "TCT GVNS: " << solution7.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
+  // gvns.CalculatesImprovement();
+  // std::cout << solution7 << std::endl;
+  Solution solution8 = gvns.MultiStartGVNS(10);
+  std::cout << "TCT GVNS: " << solution8.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
+  gvns.CalculatesImprovement();
+  std::cout << solution8 << std::endl;
+
 
   return 0;
 }

@@ -7,6 +7,7 @@
 
 class Solution {
  public:
+  Solution() {}
   Solution(const int machines) {
     assignmentsSequences_.resize(machines);
   }

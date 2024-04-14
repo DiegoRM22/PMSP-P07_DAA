@@ -10,6 +10,8 @@ SRCS = GRASP-algorithm/GRASP-algorithm.cc \
        local-search/inter-swap-local-search/inter-swap-local-search.cc \
        local-search/reinsert-local-search/reinsert-local-search.cc \
        local-search/inter-reinsert-local-search/inter-reinsert-local-search.cc \
+       VND/VND.cc \
+       GVNS/GVNS.cc \
        main.cc
 
 OBJS = $(SRCS:.cc=.o)
