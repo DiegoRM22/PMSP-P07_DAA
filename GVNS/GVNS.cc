@@ -45,17 +45,22 @@ void GVNS::CalculatesImprovement() {
 
 Solution GVNS::MultiStartGVNS(int iterations) {
   int notImprovedIterations = 0;
-  bestSolution_ = ExecuteGVNS();
+  const int maxNotImprovedIterations = 200;
+  Solution currentBestSolution = ExecuteGVNS();
   do {
     Solution new_solution = ExecuteGVNS();
-    if (new_solution.calculatesTCT(problem_.GetTotalCosts(), problem_.GetAssignmentsCosts()) < bestSolution_.calculatesTCT(problem_.GetTotalCosts(), problem_.GetAssignmentsCosts())) {
+    
+    if (new_solution.calculatesTCT(problem_.GetTotalCosts(), problem_.GetAssignmentsCosts()) < currentBestSolution.calculatesTCT(problem_.GetTotalCosts(), problem_.GetAssignmentsCosts())) {
+      std::cout << "Se encontro mejor solucion" << std::endl;
       bestSolution_ = new_solution;
+      currentBestSolution = bestSolution_;
     } else {
       notImprovedIterations++;
     }
     problem_.RestoreAssigned();
     iterations--;
     std::cout << "Iteraciones restantes: " << iterations << std::endl;	
-    // std::cout << "MEJOR TCT: " << bestSolution_.calculatesTCT(problem_.GetTotalCosts(), problem_.GetAssignmentsCosts()) << std::endl;
-  } while (iterations > 0 && notImprovedIterations < iterations / 2);
+    std::cout << "MEJOR TCT: " << currentBestSolution.calculatesTCT(problem_.GetTotalCosts(), problem_.GetAssignmentsCosts()) << std::endl;
+  } while (iterations > 0 && notImprovedIterations < maxNotImprovedIterations);
+  return currentBestSolution;
 }

@@ -23,6 +23,9 @@ int main(int argc, char *argv[]) {
   problem.CalculateTotalCosts();
   std::vector<std::vector<int>> totalCosts = problem.GetTotalCosts();
 
+  // Random seed
+  srand(time(NULL));
+
   GreedyAlgorithm greedyAlgorithm(problem);
   Solution solution = greedyAlgorithm.Solve();
   std::cout << "TCT GREEDY: " << solution.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
@@ -75,16 +78,13 @@ int main(int argc, char *argv[]) {
   // VND vnd(problem);
   // Solution solution7 = vnd.ExecuteVND();
   GVNS gvns(problem);
-  // Solution solution7 = gvns.ExecuteGVNS();
-  // improvement = (graspTCT - solution7.calculatesTCT(totalCosts, problem.GetAssignmentsCosts())) * 100 / graspTCT;
-  // std::cout << "TCT GVNS: " << solution7.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
-  // gvns.CalculatesImprovement();
-  // std::cout << solution7 << std::endl;
-  Solution solution8 = gvns.MultiStartGVNS(10);
-  std::cout << "TCT GVNS: " << solution8.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
-  gvns.CalculatesImprovement();
-  std::cout << solution8 << std::endl;
+  Solution solution7 = gvns.MultiStartGVNS(1000);
+  std::cout << "TCT GVNS: " << solution7.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
+  std::cout << solution7 << std::endl;
+  
+  
 
+  
 
   return 0;
 }
