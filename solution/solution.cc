@@ -25,24 +25,28 @@ std::ostream& operator<<(std::ostream& os, const Solution& solution) {
   * @brief Calculates the TCT
   * @return TCT
   */
-int Solution::calculatesTCT(const std::vector<std::vector<int>>& totalCosts, const std::vector<int>& assigmentCosts) const {
+int Solution::calculatesTCT(const std::vector<std::vector<int>>& totalCosts, const std::vector<int>& assigmentCosts) {
   int TCT = 0;
   // Recorre las maquinas
+  machinesTCT_.resize(assignmentsSequences_.size());
   for (int r = 0; r < assignmentsSequences_.size(); r++) {
     int machineSize = assignmentsSequences_[r].size();
+    machinesTCT_[r] = 0;
     for (int i = 0; i < machineSize; i++) {
       if ((i - 1) < 0) {
         // std::cout << "i: " << i << " r: " << r << " = " << 
         // (machineSize - i) << "*" << assigmentCosts[assignmentsSequences_[r][i] - 1] << std::endl;
         TCT += (machineSize - i) * assigmentCosts[assignmentsSequences_[r][i] - 1];
-
+        machinesTCT_[r] += (machineSize - i) * assigmentCosts[assignmentsSequences_[r][i] - 1];
       } else {
         // std::cout << "i: " << i << " r: " << r << " = " <<
         // (machineSize - i) << "*" << totalCosts[assignmentsSequences_[r][i - 1] - 1][assignmentsSequences_[r][i] - 1] << std::endl;
         TCT += (machineSize - i) * totalCosts[assignmentsSequences_[r][i - 1] - 1][assignmentsSequences_[r][i] - 1];
+        machinesTCT_[r] += (machineSize - i) * totalCosts[assignmentsSequences_[r][i - 1] - 1][assignmentsSequences_[r][i] - 1];
       }
     }
   }
+  TCT_ = TCT;
   return TCT;
 }
 
@@ -54,6 +58,28 @@ int Solution::calculatesTCT(const std::vector<std::vector<int>>& totalCosts, con
 */
 void Solution::SwapAssignments(int machine, int firstAssignment, int secondAssignment) {
   std::swap(assignmentsSequences_[machine][firstAssignment], assignmentsSequences_[machine][secondAssignment]);
+}
+
+/**
+ * @brief Recalculates the TCT for a machine.
+ * @param machine Machine to recalculate the TCT.
+ * @param totalCosts Total costs matrix.
+*/
+void Solution::RecalculeTCTForMachine(int machine, const std::vector<std::vector<int>>& totalCosts, const
+std::vector<int>& assigmentCosts, const Solution& originalSolution) {
+  int TCT = originalSolution.GetTCT() - machinesTCT_[machine];
+  int machineSize = assignmentsSequences_[machine].size();
+  machinesTCT_[machine] = 0;
+  for (int i = 0; i < machineSize; i++) {
+    if ((i - 1) < 0) {
+      TCT += (machineSize - i) * assigmentCosts[assignmentsSequences_[machine][i] - 1];
+      machinesTCT_[machine] += (machineSize - i) * assigmentCosts[assignmentsSequences_[machine][i] - 1];
+    } else {
+      TCT += (machineSize - i) * totalCosts[assignmentsSequences_[machine][i - 1] - 1][assignmentsSequences_[machine][i] - 1];
+      machinesTCT_[machine] += (machineSize - i) * totalCosts[assignmentsSequences_[machine][i - 1] - 1][assignmentsSequences_[machine][i] - 1];
+    }
+  }
+  TCT_ = TCT;
 }
 
 /**

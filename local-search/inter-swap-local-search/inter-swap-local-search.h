@@ -10,7 +10,9 @@
 
 class InterSwapLocalSearch : public LocalSearch {
  public:
-  InterSwapLocalSearch(Problem problem, Solution solution) : LocalSearch(problem, solution) {}
+  InterSwapLocalSearch(Problem problem, Solution solution) : LocalSearch(problem, solution) {
+    isInterMachineMethod_ = true;
+  }
   std::vector<Solution> GenerateNeighbors(const Solution& solution) override;
 };
 

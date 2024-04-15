@@ -16,13 +16,18 @@ class Solution {
   void AddAssignment(int machine, int assignment) {
     assignmentsSequences_[machine].push_back(assignment);
   }
-  int calculatesTCT(const std::vector<std::vector<int>>& totalCosts, const std::vector<int>& assigmentCosts) const;
+  int calculatesTCT(const std::vector<std::vector<int>>& totalCosts, const std::vector<int>& assigmentCosts);
+  int GetTCT() const { return TCT_; }
   void SwapAssignments(int machine, int firstAssignment, int secondAssignment);
   void InterchangeAssignments(int firstMachine, int firstAssignment, int secondMachine, int secondAssignment);
   void ReinsertAssignment(int machine, int assignment, int position);
   void ReinsertAssignment(int firstMachine, int firstAssignment, int secondMachine, int position);
+  void RecalculeTCTForMachine(int machine, const std::vector<std::vector<int>>& totalCosts,
+                              const std::vector<int>& assigmentCosts, const Solution& originalTCT);
  private:
   std::vector<std::vector<int>> assignmentsSequences_;
+  std::vector<int> machinesTCT_;
+  int TCT_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Solution& solution);

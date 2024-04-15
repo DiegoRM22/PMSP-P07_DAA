@@ -10,7 +10,9 @@
 
 class InterReinsertLocalSearch : public LocalSearch {
  public:
-  InterReinsertLocalSearch(Problem problem, Solution solution) : LocalSearch(problem, solution) {}
+  InterReinsertLocalSearch(Problem problem, Solution solution) : LocalSearch(problem, solution) {
+    isInterMachineMethod_ = true;
+  }
   std::vector<Solution> GenerateNeighbors(const Solution& solution) override;
 };
 

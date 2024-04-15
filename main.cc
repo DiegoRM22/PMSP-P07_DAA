@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <chrono>
 
 #include "problem/problem.h"
 #include "solution/solution.h"
@@ -74,13 +75,13 @@ int main(int argc, char *argv[]) {
   std::cout << solution6 << std::endl;
 
 
-  std::cout << "VNS" << std::endl;
-  // VND vnd(problem);
-  // Solution solution7 = vnd.ExecuteVND();
-  GVNS gvns(problem);
-  Solution solution7 = gvns.MultiStartGVNS(1000);
-  std::cout << "TCT GVNS: " << solution7.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
-  std::cout << solution7 << std::endl;
+  // std::cout << "VNS" << std::endl;
+  // // VND vnd(problem);
+  // // Solution solution7 = vnd.ExecuteVND();
+  // GVNS gvns(problem);
+  // Solution solution7 = gvns.MultiStartGVNS(1000);
+  // std::cout << "TCT GVNS: " << solution7.calculatesTCT(totalCosts, problem.GetAssignmentsCosts()) << std::endl;
+  // std::cout << solution7 << std::endl;
   
   
 
